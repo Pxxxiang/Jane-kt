@@ -8,7 +8,7 @@ android {
     buildToolsVersion rootProject.android.BUILD_TOOLS_VERSION
 
     defaultConfig {
-        applicationId "com.jan.sample"
+        applicationId "com.jane.sample"
         minSdk rootProject.android.MIN_SDK_VERSION
         targetSdk rootProject.android.TARGET_SDK_VERSION
         versionCode rootProject.app.versionCode

@@ -1,4 +1,4 @@
-package com.jan.sample
+package com.jane.sample
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
