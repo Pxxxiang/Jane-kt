@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "widget-jian-kt"
+rootProject.name = "widget-jan-kt"
 include ':app'

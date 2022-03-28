@@ -1,0 +1,39 @@
+Properties properties = new Properties()
+InputStream inputStream = project.rootProject.file('local.properties').newDataInputStream();
+properties.load(inputStream)
+
+ext {
+    app = [
+            versionCode : 1000,
+            versionName : "1.0.0.0",
+    ]
+    android = [
+            // 用于编译的SDK版本
+            COMPILE_SDK_VERSION: 31,
+            // 用于Gradle编译项目的工具版本
+            BUILD_TOOLS_VERSION: "29.0.3",
+            // 最低支持Android版本
+            MIN_SDK_VERSION    : 19,
+            // 目标版本
+            TARGET_SDK_VERSION : 31,
+    ]
+    dep = [
+            // Kotlin Core
+            CORE_KTX        : "1.7.0",
+            // Appcompat
+            APPCOMPAT       : "1.4.1",
+            // Material
+            MATERIAL        : "1.4.0",
+            // ConstraintLayout
+            CONSTRAINTLAYOUT: "2.1.3"
+    ]
+}
+
+// 获取property配置
+static String load(properties, key, defValue) {
+    def value = defValue
+    if (properties.getProperty(key) != null) {
+        value = properties.getProperty(key)
+    }
+    return value
+}

@@ -1,4 +1,4 @@
-package com.px.androidwidgetdemo
+package com.jan.sample
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
