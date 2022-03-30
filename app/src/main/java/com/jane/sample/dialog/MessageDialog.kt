@@ -3,8 +3,11 @@ package com.jane.sample.dialog
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
+import android.view.animation.*
 import android.widget.Button
 import android.widget.TextView
 import com.jane.sample.R
@@ -28,11 +31,17 @@ class MessageDialog(context: Context) : Dialog(context, R.style.Dialog) {
     private var isPositiveError: Boolean = false
     private var mNegativeCallBack: NegativeCallBack? = null
     private var mPositiveCallBack: PositiveCallBack? = null
-    private var mWindowAlpha = 0.92f;
+    private var mWindowAlpha = 0.92f
+    private var isUseAnimate: Boolean = false
+    private var mDuration: Long = 600
+    private var mGravity = Gravity.CENTER
+
+    private var mContentView: View? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.dialog_message)
+        mContentView = LayoutInflater.from(context).inflate(R.layout.dialog_message, null);
+        setContentView(mContentView!!)
         mTitleView = findViewById(R.id.textView_messageDialog_title)
         mMessageView = findViewById(R.id.textView_messageDialog_message)
         mNegativeButton = findViewById(R.id.button_messageDialog_negative)
@@ -41,13 +50,17 @@ class MessageDialog(context: Context) : Dialog(context, R.style.Dialog) {
         mPositiveButton!!.setOnClickListener {
             if (mPositiveCallBack != null) {
                 mPositiveCallBack!!.onPositiveClick()
-                dismiss()
+                if (isUseAnimate)
+                    animateDismiss()
+                else dismiss()
             }
         }
         mNegativeButton!!.setOnClickListener {
             if (mNegativeCallBack != null) {
                 mNegativeCallBack!!.onNegativeClick()
-                dismiss()
+                if (isUseAnimate)
+                    animateDismiss()
+                else dismiss()
             }
         }
 
@@ -92,6 +105,17 @@ class MessageDialog(context: Context) : Dialog(context, R.style.Dialog) {
         return this
     }
 
+    fun isUseAnimate(isUse: Boolean, duration: Long): MessageDialog {
+        isUseAnimate = isUse
+        mDuration = duration
+        return this
+    }
+
+    fun setGravity(gravity: Int): MessageDialog {
+        mGravity = gravity
+        return this
+    }
+
     override fun show() {
         super.show()
         mTitleView!!.text = mTitle
@@ -116,6 +140,55 @@ class MessageDialog(context: Context) : Dialog(context, R.style.Dialog) {
         val lp: WindowManager.LayoutParams = window!!.attributes
         lp.alpha = mWindowAlpha
         window!!.attributes = lp
+        window!!.setGravity(mGravity)
+
+        animateShow()
+    }
+
+    private fun animateShow() {
+        if (mContentView == null || !isUseAnimate) {
+            return
+        }
+        val translate = TranslateAnimation(
+            Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f,
+            Animation.RELATIVE_TO_SELF, 1f, Animation.RELATIVE_TO_SELF, 0f
+        )
+        val alpha = AlphaAnimation(0f, 1f)
+        val set = AnimationSet(true)
+        set.addAnimation(translate)
+        set.addAnimation(alpha)
+        set.interpolator = DecelerateInterpolator()
+        set.duration = mDuration
+        set.fillAfter = true
+        mContentView!!.startAnimation(set)
+    }
+
+    private fun animateDismiss() {
+        if (mContentView == null || !isUseAnimate) {
+            return
+        }
+        val translate = TranslateAnimation(
+            Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f,
+            Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 1f
+        )
+        val alpha = AlphaAnimation(1f, 0f)
+        val set = AnimationSet(true)
+        set.addAnimation(translate)
+        set.addAnimation(alpha)
+        set.interpolator = DecelerateInterpolator()
+        set.duration = mDuration
+        set.fillAfter = true
+        set.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationStart(animation: Animation) {
+            }
+
+            override fun onAnimationEnd(animation: Animation) {
+                dismiss()
+            }
+
+            override fun onAnimationRepeat(animation: Animation) {}
+        })
+        mContentView!!.startAnimation(set)
     }
 
     interface NegativeCallBack {
