@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin_8">8dp</dimen>
+    <dimen name="margin_12">12dp</dimen>
+    <dimen name="margin_16">16dp</dimen>
+    <dimen name="margin_20">20dp</dimen>
+
+    <dimen name="title_text_size">14sp</dimen>
+    <dimen name="message_text_size">12sp</dimen>
+    <dimen name="bold_button_text_size">@dimen/message_text_size</dimen>
+</resources>
