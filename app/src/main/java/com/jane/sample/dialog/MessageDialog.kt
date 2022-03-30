@@ -14,6 +14,8 @@ import com.jane.sample.R
 
 /**
  * 消息提示提示MessageDialog
+ * @author liuxin
+ * @since 2022/3/30
  */
 class MessageDialog(context: Context) : Dialog(context, R.style.Dialog) {
 
@@ -66,16 +68,19 @@ class MessageDialog(context: Context) : Dialog(context, R.style.Dialog) {
 
     }
 
+    /**设置标题*/
     fun setTitle(title: String?): MessageDialog {
         mTitle = title
         return this
     }
 
+    /**设置内容*/
     fun setMessage(message: String?): MessageDialog {
         mMessage = message
         return this
     }
 
+    /**设置取消按钮和回调*/
     fun setNegativeText(
         str: String?,
         negativeCallBack: NegativeCallBack?,
@@ -87,6 +92,7 @@ class MessageDialog(context: Context) : Dialog(context, R.style.Dialog) {
         return this
     }
 
+    /**设置确定按钮和回调*/
     fun setPositiveText(
         str: String?,
         positiveCallBack: PositiveCallBack?,
@@ -98,6 +104,7 @@ class MessageDialog(context: Context) : Dialog(context, R.style.Dialog) {
         return this
     }
 
+    /**设置透明度*/
     fun setAlpha(float: Float): MessageDialog {
         mWindowAlpha = float
         if (mWindowAlpha > 1) mWindowAlpha = 1f
@@ -105,12 +112,14 @@ class MessageDialog(context: Context) : Dialog(context, R.style.Dialog) {
         return this
     }
 
+    /**是否使用动画*/
     fun isUseAnimate(isUse: Boolean, duration: Long): MessageDialog {
         isUseAnimate = isUse
         mDuration = duration
         return this
     }
 
+    /**设置显示位置*/
     fun setGravity(gravity: Int): MessageDialog {
         mGravity = gravity
         return this
@@ -145,6 +154,7 @@ class MessageDialog(context: Context) : Dialog(context, R.style.Dialog) {
         animateShow()
     }
 
+    /**弹出动画*/
     private fun animateShow() {
         if (mContentView == null || !isUseAnimate) {
             return
@@ -163,6 +173,7 @@ class MessageDialog(context: Context) : Dialog(context, R.style.Dialog) {
         mContentView!!.startAnimation(set)
     }
 
+    /**关闭动画*/
     private fun animateDismiss() {
         if (mContentView == null || !isUseAnimate) {
             return
