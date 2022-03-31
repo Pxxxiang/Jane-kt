@@ -1,5 +1,6 @@
 package com.jane.sample.dialog
 
+import android.animation.ObjectAnimator
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
@@ -19,11 +20,12 @@ import com.jane.sample.R
  */
 class MessageDialog(context: Context) : Dialog(context, R.style.Dialog) {
 
-    private var mTitleView: TextView? = null
-    private var mMessageView: TextView? = null
-    private var mNegativeButton: Button? = null
-    private var mPositiveButton: Button? = null
-    private var mCenterView: View? = null
+    private lateinit var mTitleView: TextView
+    private lateinit var mMessageView: TextView
+    private lateinit var mNegativeButton: Button
+    private lateinit var mPositiveButton: Button
+    private lateinit var mCenterView: View
+    private lateinit var mContentView: View
 
     private var mTitle: String? = null
     private var mMessage: String? = null
@@ -38,18 +40,17 @@ class MessageDialog(context: Context) : Dialog(context, R.style.Dialog) {
     private var mDuration: Long = 600
     private var mGravity = Gravity.CENTER
 
-    private var mContentView: View? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mContentView = LayoutInflater.from(context).inflate(R.layout.dialog_message, null);
-        setContentView(mContentView!!)
+        setContentView(mContentView)
         mTitleView = findViewById(R.id.textView_messageDialog_title)
         mMessageView = findViewById(R.id.textView_messageDialog_message)
         mNegativeButton = findViewById(R.id.button_messageDialog_negative)
         mPositiveButton = findViewById(R.id.button_messageDialog_positive)
         mCenterView = findViewById(R.id.view_messageDialog_center)
-        mPositiveButton!!.setOnClickListener {
+        mPositiveButton.setOnClickListener {
             if (mPositiveCallBack != null) {
                 mPositiveCallBack!!.onPositiveClick()
                 if (isUseAnimate)
@@ -57,7 +58,7 @@ class MessageDialog(context: Context) : Dialog(context, R.style.Dialog) {
                 else dismiss()
             }
         }
-        mNegativeButton!!.setOnClickListener {
+        mNegativeButton.setOnClickListener {
             if (mNegativeCallBack != null) {
                 mNegativeCallBack!!.onNegativeClick()
                 if (isUseAnimate)
@@ -69,20 +70,20 @@ class MessageDialog(context: Context) : Dialog(context, R.style.Dialog) {
     }
 
     /**设置标题*/
-    fun setTitle(title: String?): MessageDialog {
+    fun setTitle(title: String): MessageDialog {
         mTitle = title
         return this
     }
 
     /**设置内容*/
-    fun setMessage(message: String?): MessageDialog {
+    fun setMessage(message: String): MessageDialog {
         mMessage = message
         return this
     }
 
     /**设置取消按钮和回调*/
     fun setNegativeText(
-        str: String?,
+        str: String,
         negativeCallBack: NegativeCallBack?,
         isError: Boolean = false
     ): MessageDialog {
@@ -113,7 +114,7 @@ class MessageDialog(context: Context) : Dialog(context, R.style.Dialog) {
     }
 
     /**是否使用动画*/
-    fun isUseAnimate(isUse: Boolean, duration: Long): MessageDialog {
+    fun isUseAnimate(isUse: Boolean, duration: Long = 600): MessageDialog {
         isUseAnimate = isUse
         mDuration = duration
         return this
@@ -127,24 +128,24 @@ class MessageDialog(context: Context) : Dialog(context, R.style.Dialog) {
 
     override fun show() {
         super.show()
-        mTitleView!!.text = mTitle
-        mMessageView!!.text = mMessage
-        mPositiveButton!!.text = mPositiveText
-        mNegativeButton!!.text = mNegativeText
+        mTitleView.text = mTitle
+        mMessageView.text = mMessage
+        mPositiveButton.text = mPositiveText
+        mNegativeButton.text = mNegativeText
 
         if (mNegativeText == null || mNegativeText!!.isEmpty()) {
-            mNegativeButton!!.visibility = View.GONE
-            mCenterView!!.visibility = View.GONE
+            mNegativeButton.visibility = View.GONE
+            mCenterView.visibility = View.GONE
         } else {
-            mNegativeButton!!.visibility = View.VISIBLE
-            mCenterView!!.visibility = View.VISIBLE
+            mNegativeButton.visibility = View.VISIBLE
+            mCenterView.visibility = View.VISIBLE
         }
 
         if (isNegativeError)
-            mNegativeButton!!.setTextColor(context.resources.getColor(R.color.messageDialog_button_text_fail_color))
+            mNegativeButton.setTextColor(context.resources.getColor(R.color.messageDialog_button_text_fail_color))
 
         if (isPositiveError)
-            mPositiveButton!!.setTextColor(context.resources.getColor(R.color.messageDialog_button_text_fail_color))
+            mPositiveButton.setTextColor(context.resources.getColor(R.color.messageDialog_button_text_fail_color))
 
         val lp: WindowManager.LayoutParams = window!!.attributes
         lp.alpha = mWindowAlpha
@@ -154,9 +155,24 @@ class MessageDialog(context: Context) : Dialog(context, R.style.Dialog) {
         animateShow()
     }
 
+
+    /**
+     * 错误动画
+     *
+     * @param duration    持续时间
+     * @param repeatCount 重复次数
+     */
+    fun animateErrorShow(duration: Int = 300, repeatCount: Int) {
+        show()
+        val animator = ObjectAnimator.ofFloat(mTitleView, "translationX", -10f, 10f, -10f, 10f)
+        animator.duration = duration.toLong()
+        animator.repeatCount = repeatCount
+        animator.start()
+    }
+
     /**弹出动画*/
     private fun animateShow() {
-        if (mContentView == null || !isUseAnimate) {
+        if (!isUseAnimate) {
             return
         }
         val translate = TranslateAnimation(
@@ -170,12 +186,12 @@ class MessageDialog(context: Context) : Dialog(context, R.style.Dialog) {
         set.interpolator = DecelerateInterpolator()
         set.duration = mDuration
         set.fillAfter = true
-        mContentView!!.startAnimation(set)
+        mContentView.startAnimation(set)
     }
 
     /**关闭动画*/
     private fun animateDismiss() {
-        if (mContentView == null || !isUseAnimate) {
+        if (!isUseAnimate) {
             return
         }
         val translate = TranslateAnimation(
@@ -199,7 +215,7 @@ class MessageDialog(context: Context) : Dialog(context, R.style.Dialog) {
 
             override fun onAnimationRepeat(animation: Animation) {}
         })
-        mContentView!!.startAnimation(set)
+        mContentView.startAnimation(set)
     }
 
     interface NegativeCallBack {
