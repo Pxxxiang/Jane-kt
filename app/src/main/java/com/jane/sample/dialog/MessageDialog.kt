@@ -10,6 +10,7 @@ import android.view.View
 import android.view.WindowManager
 import android.view.animation.*
 import android.widget.Button
+import android.widget.TableRow
 import android.widget.TextView
 import com.jane.sample.R
 
@@ -175,7 +176,7 @@ class MessageDialog(context: Context) : Dialog(context, R.style.Dialog) {
         animationSet.duration = duration
         animationSet.interpolator = AccelerateDecelerateInterpolator()
         animationSet.fillAfter = true
-
+        buttonEnable(animationSet)
         mContentView.startAnimation(animationSet)
 
     }
@@ -190,6 +191,7 @@ class MessageDialog(context: Context) : Dialog(context, R.style.Dialog) {
 
         val animator = AlphaAnimation(0.2f, 1f)
         animator.duration = duration
+        buttonEnable(animator)
         mContentView.startAnimation(animator)
     }
 
@@ -226,6 +228,7 @@ class MessageDialog(context: Context) : Dialog(context, R.style.Dialog) {
         set.interpolator = DecelerateInterpolator()
         set.duration = duration
         set.fillAfter = true
+        buttonEnable(set)
         mContentView.startAnimation(set)
     }
 
@@ -246,16 +249,7 @@ class MessageDialog(context: Context) : Dialog(context, R.style.Dialog) {
         set.interpolator = DecelerateInterpolator()
         set.duration = duration
         set.fillAfter = true
-        set.setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationStart(animation: Animation) {
-            }
-
-            override fun onAnimationEnd(animation: Animation) {
-                dismiss()
-            }
-
-            override fun onAnimationRepeat(animation: Animation) {}
-        })
+        buttonEnable(set, true)
         mContentView.startAnimation(set)
     }
 
@@ -267,16 +261,7 @@ class MessageDialog(context: Context) : Dialog(context, R.style.Dialog) {
     fun animateAlphaDismiss(duration: Long = DURATION_TIME) {
         val animator = AlphaAnimation(1f, 0f)
         animator.duration = duration
-        animator.setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationStart(animation: Animation) {
-            }
-
-            override fun onAnimationEnd(animation: Animation) {
-                dismiss()
-            }
-
-            override fun onAnimationRepeat(animation: Animation) {}
-        })
+        buttonEnable(animator, true)
         mContentView.startAnimation(animator)
     }
 
@@ -295,6 +280,28 @@ class MessageDialog(context: Context) : Dialog(context, R.style.Dialog) {
                 dismiss()
             }
         }
+    }
+
+    /**
+     * 禁止按钮在播放动画中被点击
+     * */
+    private fun buttonEnable(animator: Animation, boolean: Boolean = false) {
+        animator.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationStart(animation: Animation) {
+                mNegativeButton.isEnabled = false
+                mPositiveButton.isEnabled = false
+            }
+
+            override fun onAnimationEnd(animation: Animation) {
+                mNegativeButton.isEnabled = true
+                mPositiveButton.isEnabled = true
+                if (boolean)
+                    dismiss()
+            }
+
+            override fun onAnimationRepeat(animation: Animation) {}
+        })
+
     }
 
     interface NegativeCallBack {
