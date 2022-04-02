@@ -13,12 +13,15 @@ import android.widget.Button
 import android.widget.TextView
 import com.jane.sample.R
 
+
 /**
  * 消息提示提示MessageDialog
  * @author liuxin
  * @since 2022/3/30
  */
 class MessageDialog(context: Context) : Dialog(context, R.style.Dialog) {
+
+    private val DURATION_TIME: Long = 600
 
     private lateinit var mTitleView: TextView
     private lateinit var mMessageView: TextView
@@ -36,8 +39,6 @@ class MessageDialog(context: Context) : Dialog(context, R.style.Dialog) {
     private var mNegativeCallBack: NegativeCallBack? = null
     private var mPositiveCallBack: PositiveCallBack? = null
     private var mWindowAlpha = 0.92f
-    private var isUseAnimate: Boolean = false
-    private var mDuration: Long = 600
     private var mGravity = Gravity.CENTER
 
 
@@ -52,18 +53,13 @@ class MessageDialog(context: Context) : Dialog(context, R.style.Dialog) {
         mCenterView = findViewById(R.id.view_messageDialog_center)
         mPositiveButton.setOnClickListener {
             if (mPositiveCallBack != null) {
-                mPositiveCallBack!!.onPositiveClick()
-                if (isUseAnimate)
-                    animateDismiss()
-                else dismiss()
+                getTypeToDismiss(mPositiveCallBack!!.onPositiveClick())
             }
         }
         mNegativeButton.setOnClickListener {
             if (mNegativeCallBack != null) {
-                mNegativeCallBack!!.onNegativeClick()
-                if (isUseAnimate)
-                    animateDismiss()
-                else dismiss()
+                getTypeToDismiss(mNegativeCallBack!!.onNegativeClick())
+
             }
         }
 
@@ -113,15 +109,8 @@ class MessageDialog(context: Context) : Dialog(context, R.style.Dialog) {
         return this
     }
 
-    /**是否使用动画*/
-    fun isUseAnimate(isUse: Boolean, duration: Long = 600): MessageDialog {
-        isUseAnimate = isUse
-        mDuration = duration
-        return this
-    }
-
     /**设置显示位置*/
-    fun setGravity(gravity: Int): MessageDialog {
+    fun setGravity(gravity: Int = Gravity.BOTTOM): MessageDialog {
         mGravity = gravity
         return this
     }
@@ -151,30 +140,81 @@ class MessageDialog(context: Context) : Dialog(context, R.style.Dialog) {
         lp.alpha = mWindowAlpha
         window!!.attributes = lp
         window!!.setGravity(mGravity)
-
-        animateShow()
     }
 
-
     /**
-     * 错误动画
+     * 组合动画show
      *
      * @param duration    持续时间
-     * @param repeatCount 重复次数
+     * */
+    fun animationSetShow(duration: Long = 2000) {
+        show()
+
+        val animationSet = AnimationSet(true)
+
+        val alphaAnimation = AlphaAnimation(0f, 1f)
+        val rotateAnimation = RotateAnimation(
+            0f,
+            720f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f
+        )
+        val scaleAnimation = ScaleAnimation(
+            0.1f, 1f, 0.1f, 1f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f
+        )
+
+        animationSet.addAnimation(alphaAnimation)
+        animationSet.addAnimation(rotateAnimation)
+        animationSet.addAnimation(scaleAnimation)
+        animationSet.duration = duration
+        animationSet.interpolator = AccelerateDecelerateInterpolator()
+        animationSet.fillAfter = true
+
+        mContentView.startAnimation(animationSet)
+
+    }
+
+    /**
+     * 淡入淡出动画透明度Show
+     *
+     * @param duration    持续时间
      */
-    fun animateErrorShow(duration: Int = 300, repeatCount: Int) {
+    fun animateAlphaShow(duration: Long = DURATION_TIME) {
+        show()
+
+        val animator = AlphaAnimation(0.2f, 1f)
+        animator.duration = duration
+        mContentView.startAnimation(animator)
+    }
+
+    /**
+     * 错误动画左右抖动show
+     *
+     * @param repeatCount 重复次数
+     * @param duration    持续时间
+     */
+    fun animateErrorShow(repeatCount: Int, duration: Long = DURATION_TIME) {
         show()
         val animator = ObjectAnimator.ofFloat(mTitleView, "translationX", -10f, 10f, -10f, 10f)
-        animator.duration = duration.toLong()
+        animator.duration = duration
         animator.repeatCount = repeatCount
         animator.start()
     }
 
-    /**弹出动画*/
-    private fun animateShow() {
-        if (!isUseAnimate) {
-            return
-        }
+    /**
+     * 弹出动画平移show
+     *
+     * @param duration    持续时间
+     * */
+    fun animateTranslateShow(duration: Long = DURATION_TIME) {
+        show()
+
         val translate = TranslateAnimation(
             Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f,
             Animation.RELATIVE_TO_SELF, 1f, Animation.RELATIVE_TO_SELF, 0f
@@ -184,16 +224,17 @@ class MessageDialog(context: Context) : Dialog(context, R.style.Dialog) {
         set.addAnimation(translate)
         set.addAnimation(alpha)
         set.interpolator = DecelerateInterpolator()
-        set.duration = mDuration
+        set.duration = duration
         set.fillAfter = true
         mContentView.startAnimation(set)
     }
 
-    /**关闭动画*/
-    private fun animateDismiss() {
-        if (!isUseAnimate) {
-            return
-        }
+    /**
+     * 关闭动画平移dismiss
+     *
+     * @param duration    持续时间
+     * */
+    fun animateTranslateDismiss(duration: Long = DURATION_TIME) {
         val translate = TranslateAnimation(
             Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f,
             Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 1f
@@ -203,7 +244,7 @@ class MessageDialog(context: Context) : Dialog(context, R.style.Dialog) {
         set.addAnimation(translate)
         set.addAnimation(alpha)
         set.interpolator = DecelerateInterpolator()
-        set.duration = mDuration
+        set.duration = duration
         set.fillAfter = true
         set.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationStart(animation: Animation) {
@@ -218,11 +259,56 @@ class MessageDialog(context: Context) : Dialog(context, R.style.Dialog) {
         mContentView.startAnimation(set)
     }
 
+    /**
+     * 淡入淡出动画透明度Dismiss
+     *
+     * @param duration    持续时间
+     */
+    fun animateAlphaDismiss(duration: Long = DURATION_TIME) {
+        val animator = AlphaAnimation(1f, 0f)
+        animator.duration = duration
+        animator.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationStart(animation: Animation) {
+            }
+
+            override fun onAnimationEnd(animation: Animation) {
+                dismiss()
+            }
+
+            override fun onAnimationRepeat(animation: Animation) {}
+        })
+        mContentView.startAnimation(animator)
+    }
+
+    /**
+     * 根据枚举去设置dismiss类型
+     * */
+    private fun getTypeToDismiss(type: AnimatorDismissType) {
+        when (type) {
+            AnimatorDismissType.ALPHA_DISMISS -> {
+                animateAlphaDismiss()
+            }
+            AnimatorDismissType.TRANSLATE_DISMISS -> {
+                animateTranslateDismiss()
+            }
+            else -> {
+                dismiss()
+            }
+        }
+    }
+
     interface NegativeCallBack {
-        fun onNegativeClick()
+        fun onNegativeClick(): AnimatorDismissType
     }
 
     interface PositiveCallBack {
-        fun onPositiveClick()
+        fun onPositiveClick(): AnimatorDismissType
+    }
+
+    /*Dismiss类型*/
+    enum class AnimatorDismissType {
+        NORMAL,
+        ALPHA_DISMISS,
+        TRANSLATE_DISMISS,
     }
 }
