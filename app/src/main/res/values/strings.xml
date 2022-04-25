@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Jane</string>
+
+    <string name="ok">确定</string>
+    <string name="cancel">取消</string>
+
+    <!--Dialog-->
+    <string name="dialog_show_bottom">底部展出</string>
+    <string name="dialog_show_center">中心展示</string>
+    <string name="dialog_animal_error_shake">错误抖动</string>
+    <string name="dialog_animal_alpha">淡入动画展示</string>
+    <string name="dialog_animal_combination">组合动画展示</string>
+    <string name="dialog_animal_translate">平移动画展示</string>
+
 </resources>

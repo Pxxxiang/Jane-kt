@@ -29,4 +29,14 @@
         <!--如果背景需要模糊，模糊到什么程度，当值为1 时，除了dialog以外的部分全黑-->
         <item name="android:backgroundDimAmount">0.4</item>
     </style>
+
+    <style name="TextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="elevation">2dp</item>
+        <item name="android:padding">@dimen/margin_16</item>
+        <item name="android:layout_margin">@dimen/margin_8</item>
+        <item name="android:gravity">center</item>
+
+    </style>
 </resources>

@@ -10,7 +10,6 @@ import android.view.View
 import android.view.WindowManager
 import android.view.animation.*
 import android.widget.Button
-import android.widget.TableRow
 import android.widget.TextView
 import com.jane.sample.R
 
@@ -28,7 +27,8 @@ class MessageDialog(context: Context) : Dialog(context, R.style.Dialog) {
     private lateinit var mMessageView: TextView
     private lateinit var mNegativeButton: Button
     private lateinit var mPositiveButton: Button
-    private lateinit var mCenterView: View
+    private lateinit var mVerticalLineView: View
+    private lateinit var mHorizontalLineView: View
     private lateinit var mContentView: View
 
     private var mTitle: String? = null
@@ -51,16 +51,20 @@ class MessageDialog(context: Context) : Dialog(context, R.style.Dialog) {
         mMessageView = findViewById(R.id.textView_messageDialog_message)
         mNegativeButton = findViewById(R.id.button_messageDialog_negative)
         mPositiveButton = findViewById(R.id.button_messageDialog_positive)
-        mCenterView = findViewById(R.id.view_messageDialog_center)
+        mVerticalLineView = findViewById(R.id.view_messageDialog_center_vertical_line)
+        mHorizontalLineView = findViewById(R.id.view_horizontal_line)
         mPositiveButton.setOnClickListener {
             if (mPositiveCallBack != null) {
                 getTypeToDismiss(mPositiveCallBack!!.onPositiveClick())
+            } else {
+                dismiss()
             }
         }
         mNegativeButton.setOnClickListener {
             if (mNegativeCallBack != null) {
                 getTypeToDismiss(mNegativeCallBack!!.onNegativeClick())
-
+            } else {
+                dismiss()
             }
         }
 
@@ -116,6 +120,12 @@ class MessageDialog(context: Context) : Dialog(context, R.style.Dialog) {
         return this
     }
 
+    /**是否能点击外部关闭Dialog*/
+    fun show(isCanTouchOutSide: Boolean) {
+        show()
+        setCanceledOnTouchOutside(isCanTouchOutSide)
+    }
+
     override fun show() {
         super.show()
         mTitleView.text = mTitle
@@ -125,10 +135,12 @@ class MessageDialog(context: Context) : Dialog(context, R.style.Dialog) {
 
         if (mNegativeText == null || mNegativeText!!.isEmpty()) {
             mNegativeButton.visibility = View.GONE
-            mCenterView.visibility = View.GONE
+            mVerticalLineView.visibility = View.GONE
+            mHorizontalLineView.visibility = View.GONE
         } else {
             mNegativeButton.visibility = View.VISIBLE
-            mCenterView.visibility = View.VISIBLE
+            mVerticalLineView.visibility = View.VISIBLE
+            mHorizontalLineView.visibility = View.VISIBLE
         }
 
         if (isNegativeError)

@@ -10,7 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Jane">
         <activity
-            android:name="com.jane.sample.MainActivity"
+            android:name=".dialog.DialogActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Jane"
+            />
+        <activity
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
