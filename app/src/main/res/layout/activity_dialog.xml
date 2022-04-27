@@ -7,6 +7,16 @@
     tools:context=".dialog.DialogActivity"
     android:orientation="vertical">
 
+    <com.jane.sample.dialog.TitleBar
+        android:id="@+id/titleBar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:tb_text_size="12sp"
+        app:tb_title_text="Dialog展示样式"
+        app:tb_text_is_bold="false"
+        app:tb_rightView_drawable="@drawable/ic_menu"
+        app:tb_show_animate_type="translate_show" />
+
     <Button
         android:id="@+id/button_show_bottom"
         android:layout_width="match_parent"

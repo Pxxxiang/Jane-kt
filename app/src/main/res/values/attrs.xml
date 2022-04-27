@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="TitleBar">
+        <attr name="tb_title_text" format="string" />
+        <attr name="tb_text_is_bold" format="boolean" />
+        <attr name="tb_text_size" format="dimension" />
+        <attr name="tb_title_color" format="color" />
+        <attr name="tb_is_image_drawable_color_unified" format="boolean" />
+        <attr name="tb_image_unified_color" format="reference" />
+
+        <attr name="tb_rightView_drawable" format="reference" />
+        <attr name="tb_show_animate_type">
+            <enum name="none" value="0" />
+            <enum name="rotation_alpha_show" value="1" />
+            <enum name="translate_show" value="2" />
+        </attr>
+    </declare-styleable>
+
+</resources>

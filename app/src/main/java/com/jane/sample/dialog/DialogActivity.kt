@@ -1,18 +1,23 @@
 package com.jane.sample.dialog
 
 import android.app.Activity
+import android.graphics.Color
 import android.os.Bundle
 import android.view.Gravity
-import android.view.View
 import android.widget.Button
 import com.jane.sample.R
 
 class DialogActivity : Activity(), MessageDialog.NegativeCallBack, MessageDialog.PositiveCallBack {
+    private lateinit var mTitleBar: TitleBar
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dialog)
 
         actionBar!!.hide()
+        mTitleBar = findViewById(R.id.titleBar)
+        mTitleBar.setOnGoBackViewClick { finish() }
+        mTitleBar.setOnRightViewClick { mTitleBar.reshowAnimal() }
 
         findViewById<Button>(R.id.button_show_bottom).setOnClickListener {
             MessageDialog(this)
