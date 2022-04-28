@@ -35,4 +35,5 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$dep.APPCOMPAT"
     implementation "com.google.android.material:material:$dep.MATERIAL"
     implementation "androidx.constraintlayout:constraintlayout:$dep.CONSTRAINTLAYOUT"
+    implementation project(path: ':module-widget')
 }

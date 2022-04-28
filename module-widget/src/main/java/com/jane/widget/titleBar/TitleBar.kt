@@ -1,4 +1,4 @@
-package com.jane.sample.dialog
+package com.jane.widget.titleBar
 
 import android.content.Context
 import android.graphics.Color
@@ -13,7 +13,7 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.widget.TextViewCompat
-import com.jane.sample.R
+import com.jane.widget.R
 import kotlin.math.max
 
 class TitleBar @JvmOverloads constructor(

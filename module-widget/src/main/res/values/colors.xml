@@ -8,4 +8,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+    <color name="transparent">#00000000</color>
+    <color name="messageDialog_button_text_color">#5a95cc</color>
+    <color name="messageDialog_button_text_fail_color">#ff4640</color>
 </resources>

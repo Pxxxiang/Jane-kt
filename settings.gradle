@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 rootProject.name = "Jane-kt"
 include ':app'
 include ':module-mvp'
+include ':module-widget'

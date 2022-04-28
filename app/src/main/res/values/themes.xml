@@ -14,29 +14,4 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <!-- Message_Dialog的style -->
-    <style name="Dialog" parent="@android:style/Theme.Dialog">
-        <!--除去背景色-->
-        <item name="android:windowBackground">@color/transparent</item>
-        <!--是否去除标题 -->
-        <item name="android:windowNoTitle">true</item>
-        <!--是否去除边框-->
-        <item name="android:windowFrame">@null</item>
-        <!--是否浮现在activity之上-->
-        <item name="android:windowIsFloating">true</item>
-        <!--是否模糊-->
-        <item name="android:backgroundDimEnabled">true</item>
-        <!--如果背景需要模糊，模糊到什么程度，当值为1 时，除了dialog以外的部分全黑-->
-        <item name="android:backgroundDimAmount">0.4</item>
-    </style>
-
-    <style name="TextStyle">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="elevation">2dp</item>
-        <item name="android:padding">@dimen/margin_16</item>
-        <item name="android:layout_margin">@dimen/margin_8</item>
-        <item name="android:gravity">center</item>
-
-    </style>
 </resources>

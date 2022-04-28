@@ -1,4 +1,4 @@
-package com.jane.sample.dialog
+package com.jane.widget.dialog
 
 import android.animation.ObjectAnimator
 import android.app.Dialog
@@ -11,7 +11,7 @@ import android.view.WindowManager
 import android.view.animation.*
 import android.widget.Button
 import android.widget.TextView
-import com.jane.sample.R
+import com.jane.widget.R
 
 
 /**
