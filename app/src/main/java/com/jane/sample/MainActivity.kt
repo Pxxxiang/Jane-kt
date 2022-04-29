@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
 import com.jane.sample.dialog.DialogActivity
+import com.jane.sample.titleBar.TitleBarActivity
 
 class MainActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -14,6 +15,10 @@ class MainActivity : Activity() {
         // dialog
         findViewById<TextView>(R.id.textView_dialog).setOnClickListener {
             startActivity(Intent(this, DialogActivity::class.java))
+        }
+        // titleBar
+        findViewById<TextView>(R.id.textView_titleBar).setOnClickListener {
+            startActivity(Intent(this, TitleBarActivity::class.java))
         }
     }
 }

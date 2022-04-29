@@ -12,8 +12,11 @@
         <activity
             android:name=".dialog.DialogActivity"
             android:exported="false"
-            android:theme="@style/Theme.Jane"
-            />
+            android:theme="@style/Theme.Jane" />
+        <activity
+            android:name=".titleBar.TitleBarActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Jane" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

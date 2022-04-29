@@ -15,4 +15,12 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <TextView
+        android:id="@+id/textView_titleBar"
+        style="@style/TextStyle"
+        android:background="@drawable/bg_radius_white"
+        android:text="TitleBar"
+        android:drawableTop="@drawable/ic_dialog"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView_dialog" />
 </androidx.constraintlayout.widget.ConstraintLayout>

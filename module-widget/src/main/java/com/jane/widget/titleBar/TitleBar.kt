@@ -1,8 +1,10 @@
 package com.jane.widget.titleBar
 
+import android.R.attr.duration
+import android.animation.ValueAnimator
+import android.animation.ValueAnimator.AnimatorUpdateListener
 import android.content.Context
-import android.graphics.Color
-import android.graphics.Typeface
+import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.os.Handler
 import android.util.AttributeSet
@@ -16,6 +18,12 @@ import androidx.core.widget.TextViewCompat
 import com.jane.widget.R
 import kotlin.math.max
 
+
+/**
+ * 带动画的titleBar
+ * @author liuxin
+ * @since 2022/4/27
+ */
 class TitleBar @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : RelativeLayout(context, attrs, defStyleAttr) {
@@ -166,6 +174,16 @@ class TitleBar @JvmOverloads constructor(
         mRightImageView.setOnClickListener(listener)
     }
 
+    /**返回按钮显示状态*/
+    fun setGoBackViewVisibility(visibility: Int) {
+        mGoBackView.visibility = visibility
+    }
+
+    /**右侧按钮显示状态*/
+    fun setRightViewVisibility(visibility: Int) {
+        mRightImageView.visibility = visibility
+    }
+
     /**设置标题TitleText的属性*/
     fun setTitleText(title: String?, isBold: Boolean = true, textSize: Float = 18f) {
         mTitleView.text = title
@@ -214,7 +232,8 @@ class TitleBar @JvmOverloads constructor(
 
     /**切换图片资源的颜色*/
     fun changeDrawableTint(drawable: Drawable, color: Int): Drawable {
-        val wrappedDrawable: Drawable = DrawableCompat.wrap(drawable)
+        // drawable.mutate()防止一个屏幕里同一个图片使用了多次
+        val wrappedDrawable: Drawable = DrawableCompat.wrap(drawable.mutate())
         DrawableCompat.setTint(wrappedDrawable, color)
         return wrappedDrawable
     }
